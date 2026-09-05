@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            color: #4a5568;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .grade-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .grade-A { background: #48bb78; color: white; }
+        .grade-B { background: #4299e1; color: white; }
+        .grade-C { background: #ecc94b; color: #744210; }
+        .grade-D { background: #ed8936; color: white; }
+        .grade-F { background: #f56565; color: white; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-box .label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .message.success {
+            background: #c6f6d5;
+            color: #22543d;
+            display: block;
+        }
+
+        .message.error {
+            background: #fed7d7;
+            color: #742a2a;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Student Performance Analytics</h1>
+            <p>Data Engineering Project | FastAPI + SQL + ETL Pipeline</p>
+        </div>
+
+        <div class="grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Add Student Form -->
+                <div class="card">
+                    <h2>➕ Add New Student</h2>
+                    <div class="input-group">
+                        <label>Student Name</label>
+                        <input type="text" id="studentName" placeholder="Enter student name">
+                    </div>
+                    <div class="input-group">
+                        <label>Subject</label>
+                        <input type="text" id="studentSubject" placeholder="Enter subject">
+                    </div>
+                    <div class="input-group">
+                        <label>Marks (0-100)</label>
+                        <input type="number" id="studentMarks" placeholder="Enter marks" min="0" max="100">
+                    </div>
+                    <button class="btn btn-success" onclick="addStudent()">Add Student</button>
+                    <div id="addMessage" class="message"></div>
+                </div>
+
+                <!-- Analytics -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2>📊 Analytics Dashboard</h2>
+                    <button class="btn btn-primary" onclick="loadAnalytics()">Load Analytics</button>
+                    <div id="analyticsResult" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Student List -->
+                <div class="card">
+                    <h2>📋 Student Records</h2>
+                    <button class="btn btn-primary" onclick="loadStudents()">Refresh Students</button>
+                    <button class="btn btn-warning" onclick="exportCSV()" style="margin-left: 10px;">📥 Export CSV</button>
+                    <div id="studentTable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+
+        // Load all students
+        async function loadStudents() {
+            try {
+                const response = await fetch(`${API_BASE}/students`);
+                const students = await response.json();
+                
+                if (students.length === 0) {
+                    document.getElementById('studentTable').innerHTML = '<p style="margin-top: 15px;">No students found.</p>';
+                    return;
+                }
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Subject</th>
+                                <th>Marks</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                students.forEach(s => {
+                    html += `
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>${s.name}</td>
+                            <td>${s.subject}</td>
+                            <td>${s.marks}</td>
+                            <td><span class="grade-badge grade-${s.grade}">${s.grade}</span></td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                document.getElementById('studentTable').innerHTML = html;
+            } catch (error) {
+                document.getElementById('studentTable').innerHTML = '<p style="color: red; margin-top: 15px;">Error loading students. Make sure the API is running!</p>';
+            }
+        }
+
+        // Add new student
+        async function addStudent() {
+            const name = document.getElementById('studentName').value;
+            const subject = document.getElementById('studentSubject').value;
+            const marks = document.getElementById('studentMarks').value;
+
+            const messageDiv = document.getElementById('addMessage');
+            messageDiv.className = 'message';
+
+            if (!name || !subject || !marks) {
+                messageDiv.textContent = '❌ Please fill all fields!';
+                messageDiv.classList.add('error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/students`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        subject: subject,
+                        marks: parseInt(marks)
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = `✅ Student ${name} added successfully!`;
+                    messageDiv.classList.add('success');
+                    
+                    // Clear form
+                    document.getElementById('studentName').value = '';
+                    document.getElementById('studentSubject').value = '';
+                    document.getElementById('studentMarks').value = '';
+                    
+                    // Refresh student list
+                    loadStudents();
+                } else {
+                    messageDiv.textContent = `❌ Error: ${data.detail || 'Something went wrong'}`;
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                messageDiv.textContent = '❌ Error connecting to API. Make sure the server is running!';
+                messageDiv.classList.add('error');
+            }
+        }
+
+        // Load analytics
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/summary`);
+                const data = await response.json();
+
+                const gradeDist = data.grade_distribution || {};
+                
+                let html = `
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="number">${data.total_records}</div>
+                            <div class="label">Total Students</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number">${data.average_marks}</div>
+                            <div class="label">Average Marks</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number">${data.maximum_marks}</div>
+                            <div class="label">Maximum Marks</div>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 20px; color: #333;">Grade Distribution</h3>
+                    <div style="margin-top: 10px;">
+                `;
+
+                for (const [grade, count] of Object.entries(gradeDist)) {
+                    html += `<span class="grade-badge grade-${grade}">${grade}: ${count}</span> `;
+                }
+
+                html += '</div>';
+                document.getElementById('analyticsResult').innerHTML = html;
+            } catch (error) {
+                document.getElementById('analyticsResult').innerHTML = '<p style="color: red;">Error loading analytics. Make sure the API is running!</p>';
+            }
+        }
+
+        // Export to CSV
+        async function exportCSV() {
+            try {
+                const response = await fetch(`${API_BASE}/export-csv`);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'students_data.csv';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Error exporting CSV. Make sure the API is running!');
+            }
+        }
+
+        // Load students on page load
+        loadStudents();
+    </script>
+</body>
+</html>
